@@ -1,0 +1,71 @@
+#root {
+  margin: 0 auto;
+  --primarycolor: #2557a7;
+  --primarycolortint: #e9eef6;
+  --accentcolor: #fb275d;
+}
+.bg-light {
+  background-color: #f3f2f1;
+}
+.bg-white {
+  background-color: #ffffff;
+}
+/*BUTTON*/
+.btn-primary {
+  background-color: var(--primarycolor) !important;
+}
+.btn-primary-tint {
+  background-color: var(--primarycolortint);
+  color: var(--primarycolor);
+}
+.btn-light:hover {
+  color: #fff !important;
+  text-decoration: none;
+}
+.btn-outline{
+  border: 1px solid var(--primarycolor);
+  color: var(--primarycolor);
+}
+.btn-outline:hover{
+  border: 1px solid var(--primarycolor);
+  color: var(--primarycolor);
+}
+/*NAVBAR*/
+/*.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}*/
+
+.navbar-toggler:focus {
+  text-decoration: none;
+  outline: 0;
+  box-shadow: none !important;
+}
+
+.large-space {
+  padding-top: 4rem;
+}
+.small-space {
+  padding-top: 2rem;
+}
+
+li {
+  list-style-type: none;
+}
+
+/* Hide scrollbar for joblist section */
+.custom-scrollbar {
+  overflow-y: scroll; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; 
+}
+
+@media (max-width: 767px) {
+  .job-card {
+    border: none; 
+  }
+}
+
