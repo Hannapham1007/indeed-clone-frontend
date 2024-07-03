@@ -1,14 +1,15 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const getAllPosts = async () => {
-  try {
-    const response = await fetch(`${API_URL}/job_posts`);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return error.response.data;
-  }
+export const getAllPosts = () => {
+  return fetch(`${API_URL}/job_posts`)
+  .then(response => response.json())
+  .then(data => {
+      return data;
+  })
+  .catch(error => {
+      console.error('Error fetching job posts:', error);
+      throw error;
+  });
 };
 
 export const authSignin = async (signinCredentials) => {
