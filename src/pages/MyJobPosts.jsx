@@ -14,6 +14,7 @@ function MyJobPosts() {
   const { posts, setPosts } = useContext(PostContext);
   const [showModal, setShowModal] = useState(false);
 
+  console.log(loggedInUser)
   const sortPostByDate = (posts) =>{
     return posts.slice().sort((a,b)=>{
       return new Date(b.createdAt) - new Date(a.createdAt);
@@ -23,7 +24,10 @@ function MyJobPosts() {
   const getPostByUserId = async () => {
     const response = await getUserById(loggedInUser.id, token);
     if (response && response.data) {
-      setMyPosts(response.data);
+      setMyPosts({
+        ...response.data,
+        jobs: response.data.jobs || [] 
+      });
     }
   };
 

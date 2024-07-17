@@ -31,9 +31,11 @@ function Header() {
         </Link>
         <div>
           {loggedInUser ? (
+            <div>
             <button className="btn btn-primary d-lg-none me-2" onClick={logOut}>
               Log out
             </button>
+            </div>
           ) : (
             <button
               className="btn btn-primary d-lg-none me-2"
@@ -62,6 +64,9 @@ function Header() {
               <NavLink className="nav-link" to="/">
                 Home page
               </NavLink>
+            </li>
+            <li>
+              <NavLink className="nav-link" to="/my_saved_jobs">My saved jobs</NavLink>
             </li>
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">

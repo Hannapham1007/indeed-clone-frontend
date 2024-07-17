@@ -5,30 +5,44 @@ import Home from "./pages/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Employer from "./pages/Employer";
 import { useState, createContext, useEffect } from "react";
-import { getAllPosts } from "./services/api";
+import { getAllPosts, getSavedJobs } from "./services/api";
 import JobPostDetails from "./components/JobPostDetails";
 import Auth from "./pages/Auth";
 import PageNotFound from "./pages/PageNotFound";
 import MyJobPosts from "./pages/MyJobPosts";
 import EditJobPost from "./pages/EditJobPost";
+import MySavedJobs from "./pages/MySavedJobs";
 
 const PostContext = createContext();
+const SavedJobContext = createContext();
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [savedJobs, setSavedJobs] = useState([]); 
+  console.log(savedJobs);
+
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const token = localStorage.getItem("token");
 
   const getPosts = async () => {
     const response = await getAllPosts();
     setPosts(response.data);
   };
 
+  const getSavedJobPosts = async ()=>{
+    const response = await getSavedJobs(loggedInUser.id, token);
+    setSavedJobs(response.data);
+  }
+
   useEffect(() => {
     getPosts();
+    getSavedJobPosts();
   }, []);
 
   return (
     <>
       <PostContext.Provider value={{ posts, setPosts }}>
+        <SavedJobContext.Provider value={{savedJobs, setSavedJobs}}>
         <Header></Header>
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>
@@ -46,11 +60,13 @@ function App() {
           <Route path="/edit_job_post/:id" element={<EditJobPost></EditJobPost>}></Route>
           <Route path="/404" element={<PageNotFound></PageNotFound>}></Route>
           <Route path="*" element={<Navigate to="/404" />}></Route>
+          <Route path="/my_saved_jobs" element={<MySavedJobs></MySavedJobs>}></Route>
         </Routes>
+        </SavedJobContext.Provider>
       </PostContext.Provider>
 
     </>
   );
 }
 
-export { App, PostContext };
+export { App, PostContext, SavedJobContext };
