@@ -5,39 +5,55 @@ import { saveJob, unsaveJob } from "../services/api";
 import { SavedJobContext } from "../App";
 
 dayjs.extend(relativeTime);
-//TODO fix UI unsave book mark 
+
 function JobPost({ jobPost }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const [isSaved, setIsSaved] = useState(false); 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const token = localStorage.getItem("token");
   const { savedJobs, setSavedJobs } = useContext(SavedJobContext);
+  const [isSaved, setIsSaved] = useState(false);
 
   const toggleDescription = () => {
-    setShowFullDescription((prevShowFullDescription) => !prevShowFullDescription);
+    setShowFullDescription(
+      (prevShowFullDescription) => !prevShowFullDescription
+    );
   };
 
   const words = jobPost.description.split(" ");
-  const descriptionToShow = showFullDescription ? jobPost.description : words.slice(0, 30).join(" ");
-  
+  const descriptionToShow = showFullDescription
+    ? jobPost.description
+    : words.slice(0, 30).join(" ");
+
   const formatDate = (createdAt) => {
     return dayjs(createdAt).fromNow();
   };
 
   useEffect(() => {
-    const jobExists = savedJobs.some((savedJob) => savedJob.job.id === jobPost.id);
+    const jobExists = savedJobs.some(
+      (savedJob) => savedJob.job.id === jobPost.id
+    );
     setIsSaved(jobExists);
   }, [savedJobs, jobPost.id]);
 
   const onSaveClick = async () => {
-    if (isSaved) {
+    const jobExists = savedJobs.some(
+      (savedJob) => savedJob.job.id === jobPost.id
+    );
+
+    if (jobExists) {
       // Unsave the job
-      const theSavedJob = savedJobs.find((savedJob) => savedJob.job.id === jobPost.id);
-      const response = await unsaveJob(theSavedJob.id, token); 
-      if (response && response.success) {
-        const updatedSavedJobs = savedJobs.filter((savedJob) => savedJob.job.id !== jobPost.id);
-        setSavedJobs(updatedSavedJobs);
-        setIsSaved(false);
+      const theSavedJob = savedJobs.find(
+        (savedJob) => savedJob.job.id === jobPost.id
+      );
+      if (theSavedJob) {
+        const response = await unsaveJob(theSavedJob.id, token);
+        if (response && response.data) {
+          const updatedSavedJobs = savedJobs.filter(
+            (savedJob) => savedJob.id !== theSavedJob.id
+          );
+          setSavedJobs(updatedSavedJobs);
+          setIsSaved(false);
+        }
       }
     } else {
       // Save the job
@@ -60,7 +76,7 @@ function JobPost({ jobPost }) {
         <div className="d-flex justify-content-between">
           <h5 className="card-title mb-3">{jobPost.title}</h5>
           <button
-            className=" px-2 py-1 rounded-2 btn-primary-tint mb-2 border-0"
+            className="px-2 py-1 rounded-2 btn-primary-tint mb-2 border-0"
             onClick={handleSaveJob}
           >
             {isSaved ? (

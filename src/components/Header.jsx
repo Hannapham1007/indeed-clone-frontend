@@ -31,11 +31,9 @@ function Header() {
         </Link>
         <div>
           {loggedInUser ? (
-            <div>
             <button className="btn btn-primary d-lg-none me-2" onClick={logOut}>
               Log out
             </button>
-            </div>
           ) : (
             <button
               className="btn btn-primary d-lg-none me-2"
@@ -65,7 +63,7 @@ function Header() {
                 Home page
               </NavLink>
             </li>
-            <li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/my_saved_jobs">My saved jobs</NavLink>
             </li>
           </ul>
@@ -79,6 +77,7 @@ function Header() {
                 Post a job
               </NavLink>
             </li>
+
             <li className="nav-item">
               <NavLink className="nav-link" to="/employer">
                 Employer
