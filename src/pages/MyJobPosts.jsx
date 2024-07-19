@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getUserById, deleteJobPost } from "../services/api";
+import { getJobPostByUser, deleteJobPost } from "../services/api";
 import JobPost from "../components/JobPost";
 import { useNavigate } from "react-router-dom";
 import { PostContext } from "../App";
 import ModalDelete from "../components/ModalDelete";
 
 function MyJobPosts() {
-  const [myPosts, setMyPosts] = useState({ jobs: [] });
+  const [myPosts, setMyPosts] = useState([]);
   const [selectedJobId, setSelectedJobId] = useState(null);
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const token = localStorage.getItem("token");
@@ -14,20 +14,16 @@ function MyJobPosts() {
   const { posts, setPosts } = useContext(PostContext);
   const [showModal, setShowModal] = useState(false);
 
-  console.log(loggedInUser)
-  const sortPostByDate = (posts) =>{
-    return posts.slice().sort((a,b)=>{
+  const sortPostByDate = () => {
+    return myPosts.slice().sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
-    })
-  }
+    });
+  };
 
-  const getPostByUserId = async () => {
-    const response = await getUserById(loggedInUser.id, token);
+  const getPost= async () => {
+    const response = await getJobPostByUser(loggedInUser.id, token);
     if (response && response.data) {
-      setMyPosts({
-        ...response.data,
-        jobs: response.data.jobs || [] 
-      });
+      setMyPosts(response.data);
     }
   };
 
@@ -45,7 +41,7 @@ function MyJobPosts() {
   };
 
   useEffect(() => {
-    getPostByUserId();
+    getPost();
   }, []);
 
   const postList = sortPostByDate(myPosts.jobs) || [];

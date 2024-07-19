@@ -1,22 +1,48 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { PostContext, SavedJobContext } from "../App";
 import JobPost from "../components/JobPost";
 
 function MySavedJobs() {
-  const { savedJobs } = useContext(SavedJobContext);
+  const { savedJobs, localSavedJobs } = useContext(SavedJobContext);
   const { posts } = useContext(PostContext);
+  const loggedInUser = localStorage.getItem("loggedInUser");
+
   const getJobDetails = (jobId) => {
     return posts.find((post) => Number(post.id) === Number(jobId));
   };
 
+  if (!loggedInUser) {
+    return (
+      <div className="container">
+        <h2 className="small-space">My Jobs</h2>
+        {localSavedJobs.length < 1 ? (
+          <div className="small-space text-center">
+            <p className="fw-bold mb-0">No jobs have been saved yet</p>
+            <p>Jobs that you save are displayed here</p>
+            <button className="btn btn-primary">Find a job</button>
+          </div>
+        ) : (
+          localSavedJobs.map((savedJob) => {
+            const jobDetails = getJobDetails(savedJob.id);
+            return (
+              <div key={savedJob.id}>
+                <JobPost jobPost={jobDetails} />
+              </div>
+            );
+          })
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="container">
-      <h2 className=" small-space">My Jobs</h2>
+      <h2 className="small-space">My Jobs</h2>
       {savedJobs.length < 1 ? (
-        <div className=" small-space text-center">
+        <div className="small-space text-center">
           <p className="fw-bold mb-0">No jobs have been saved yet</p>
           <p>Jobs that you save are displayed here</p>
-          <button className="btn btn-primary">Find a jobs</button>
+          <button className="btn btn-primary">Find a job</button>
         </div>
       ) : (
         savedJobs.map((savedJob) => {

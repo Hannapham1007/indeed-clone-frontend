@@ -10,64 +10,71 @@ function JobPost({ jobPost }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const token = localStorage.getItem("token");
-  const { savedJobs, setSavedJobs } = useContext(SavedJobContext);
+  const { savedJobs, setSavedJobs, localSavedJobs, setLocalSavedJobs } = useContext(SavedJobContext);
   const [isSaved, setIsSaved] = useState(false);
 
   const toggleDescription = () => {
-    setShowFullDescription(
-      (prevShowFullDescription) => !prevShowFullDescription
-    );
+    setShowFullDescription(prev => !prev);
   };
 
   const words = jobPost.description.split(" ");
-  const descriptionToShow = showFullDescription
-    ? jobPost.description
-    : words.slice(0, 30).join(" ");
+  const descriptionToShow = showFullDescription ? jobPost.description : words.slice(0, 30).join(" ");
 
   const formatDate = (createdAt) => {
     return dayjs(createdAt).fromNow();
   };
 
   useEffect(() => {
-    const jobExists = savedJobs.some(
-      (savedJob) => savedJob.job.id === jobPost.id
-    );
-    setIsSaved(jobExists);
-  }, [savedJobs, jobPost.id]);
+    if (loggedInUser) {
+      const jobExists = savedJobs.some(savedJob => savedJob.job.id === jobPost.id);
+      setIsSaved(jobExists);
+    } else {
+      const jobExists = localSavedJobs.some(savedJob => savedJob.id === jobPost.id);
+      setIsSaved(jobExists);
+    }
+  }, [savedJobs, jobPost.id, localSavedJobs, loggedInUser]);
 
   const onSaveClick = async () => {
-    const jobExists = savedJobs.some(
-      (savedJob) => savedJob.job.id === jobPost.id
-    );
+    if (!loggedInUser) {
+      const jobExists = localSavedJobs.some(savedJob => savedJob.id === jobPost.id);
 
-    if (jobExists) {
-      // Unsave the job
-      const theSavedJob = savedJobs.find(
-        (savedJob) => savedJob.job.id === jobPost.id
-      );
-      if (theSavedJob) {
-        const response = await unsaveJob(theSavedJob.id, token);
-        if (response && response.data) {
-          const updatedSavedJobs = savedJobs.filter(
-            (savedJob) => savedJob.id !== theSavedJob.id
-          );
-          setSavedJobs(updatedSavedJobs);
-          setIsSaved(false);
-        }
-      }
-    } else {
-      // Save the job
-      const response = await saveJob(loggedInUser.id, jobPost.id, token);
-      if (response && response.data) {
-        const updatedSavedJobs = [...savedJobs, response.data];
-        setSavedJobs(updatedSavedJobs);
+      if (jobExists) {
+        // Unsave the local saved job
+        const updatedSavedJobs = localSavedJobs.filter(savedJob => savedJob.id !== jobPost.id);
+        setLocalSavedJobs(updatedSavedJobs);
+        localStorage.setItem("localSavedJobs", JSON.stringify(updatedSavedJobs));
+        setIsSaved(false);
+      } else {
+        // Save the job
+        const updatedSavedJobs = [...localSavedJobs, { id: jobPost.id, job: jobPost }];
+        setLocalSavedJobs(updatedSavedJobs);
+        localStorage.setItem("localSavedJobs", JSON.stringify(updatedSavedJobs));
         setIsSaved(true);
       }
-    }
-  };
+    } else {
+      const jobExists = savedJobs.some(savedJob => savedJob.job.id === jobPost.id);
 
-  const handleSaveJob = () => {
-    onSaveClick();
+      if (jobExists) {
+        // Unsave the job
+        const theSavedJob = savedJobs.find(savedJob => savedJob.job.id === jobPost.id);
+        if (theSavedJob) {
+          const response = await unsaveJob(theSavedJob.id, token);
+          if (response && response.data) {
+            const updatedSavedJobs = savedJobs.filter(savedJob => savedJob.job.id !== jobPost.id);
+            setSavedJobs(updatedSavedJobs);
+            setIsSaved(false);
+          }
+        }
+      } else {
+        // Save the job
+        const response = await saveJob(loggedInUser.id, jobPost.id, token);
+        if (response && response.data) {
+          const updatedSavedJobs = [...savedJobs, response.data];
+          setSavedJobs(updatedSavedJobs);
+          setIsSaved(true);
+        }
+      }
+    }
   };
 
   return (
@@ -77,7 +84,7 @@ function JobPost({ jobPost }) {
           <h5 className="card-title mb-3">{jobPost.title}</h5>
           <button
             className="px-2 py-1 rounded-2 btn-primary-tint mb-2 border-0"
-            onClick={handleSaveJob}
+            onClick={onSaveClick}
           >
             {isSaved ? (
               <i className="bi bi-bookmark-fill"></i>

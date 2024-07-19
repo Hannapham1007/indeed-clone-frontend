@@ -125,6 +125,24 @@ export const getUserById = async (id, token) => {
   }
 };
 
+export const getJobPostByUser = async (id, token) =>{
+  try {
+    const response = await fetch(`${API_URL}/job_posts/list/belong/${id}`,{
+      method:"GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    const data = await response.json();
+    return data;
+    
+  } catch (error) {
+    console.log("Error fetching job post", error);
+    throw error;
+  }
+}
+
 export const getSavedJobs = async (userId, token) => {
   try {
     const response = await fetch(`${API_URL}/saved_jobs/${userId}`, {

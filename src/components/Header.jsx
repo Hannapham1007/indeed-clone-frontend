@@ -10,8 +10,6 @@ function Header() {
 
   const logOut = () => {
     localStorage.clear();
-    setSavedJobs([]);
-    setLocalSavedJobs([]);
     navigate("/");
   };
 
