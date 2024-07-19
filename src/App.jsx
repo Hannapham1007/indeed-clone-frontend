@@ -19,7 +19,7 @@ const SavedJobContext = createContext();
 function App() {
   const [posts, setPosts] = useState([]);
   const [savedJobs, setSavedJobs] = useState([]); 
-  console.log(savedJobs);
+  const [localSavedJobs, setLocalSavedJobs] = useState([]);
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const token = localStorage.getItem("token");
@@ -36,13 +36,15 @@ function App() {
 
   useEffect(() => {
     getPosts();
-    getSavedJobPosts();
+    if(loggedInUser && token){
+      getSavedJobPosts();
+    }
   }, []);
 
   return (
     <>
       <PostContext.Provider value={{ posts, setPosts }}>
-        <SavedJobContext.Provider value={{savedJobs, setSavedJobs}}>
+        <SavedJobContext.Provider value={{savedJobs, setSavedJobs, localSavedJobs, setLocalSavedJobs}}>
         <Header></Header>
         <Routes>
           <Route path="/" element={<Home></Home>}></Route>

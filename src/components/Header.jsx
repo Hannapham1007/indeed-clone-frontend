@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import indeed_logo_image from "../assets/Indeed_Logo_RGB.png";
+import { SavedJobContext } from "../App";
 
 function Header() {
   const loggedInUser = localStorage.getItem("loggedInUser");
   const navigate = useNavigate();
+  const {setSavedJobs, setLocalSavedJobs} = useContext(SavedJobContext);
 
   const logOut = () => {
     localStorage.clear();
+    setSavedJobs([]);
+    setLocalSavedJobs([]);
     navigate("/");
   };
 
