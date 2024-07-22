@@ -1,24 +1,27 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import indeed_logo_image from "../assets/Indeed_Logo_RGB.png";
-import { SavedJobContext } from "../App";
 
 function Header() {
   const loggedInUser = localStorage.getItem("loggedInUser");
   const navigate = useNavigate();
-  const {setSavedJobs, setLocalSavedJobs} = useContext(SavedJobContext);
+  const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
 
   const logOut = () => {
     localStorage.clear();
     navigate("/");
   };
 
-  const isLoggedInUser = () => {
+  const isLoggedInUser = (event) => {
+    event.preventDefault();
     if (loggedInUser) {
       navigate("/create_job_post");
     } else {
       navigate("/auth");
     }
+  };
+  const toggleNavbar = () => {
+    setIsNavbarExpanded(!isNavbarExpanded);
   };
 
   return (
@@ -31,7 +34,7 @@ function Header() {
             style={{ width: 95, marginBottom: 6 }}
           />
         </Link>
-        <div>
+        <div className="d-flex">
           {loggedInUser ? (
             <button className="btn btn-primary d-lg-none me-2" onClick={logOut}>
               Log out
@@ -51,10 +54,17 @@ function Header() {
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
-            aria-expanded="false"
+            aria-expanded={isNavbarExpanded} 
             aria-label="Toggle navigation"
+            onClick={toggleNavbar}
           >
-            <span className="navbar-toggler-icon"></span>
+            <span>
+            {isNavbarExpanded ? (
+                <i className="bi bi-x-lg fs-2"></i> 
+              ) : (
+                <i className="bi bi-list fs-2"></i> 
+              )}
+            </span>
           </button>
         </div>
 
@@ -74,8 +84,8 @@ function Header() {
             <li className="nav-item">
               {loggedInUser ? (<NavLink className="nav-link" to="/my_job_posts">My job posts</NavLink>) : ("")}
             </li>
-            <li className="nav-item" onClick={() => isLoggedInUser()}>
-              <NavLink className="nav-link">
+            <li className="nav-item" >
+              <NavLink className="nav-link" to="/create_job_post" onClick={isLoggedInUser}>
                 Post a job
               </NavLink>
             </li>

@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
 import { PostContext, SavedJobContext } from "../App";
 import JobPost from "../components/JobPost";
+import { useNavigate } from "react-router-dom";
 
 function MySavedJobs() {
   const { savedJobs, localSavedJobs } = useContext(SavedJobContext);
   const { posts } = useContext(PostContext);
   const loggedInUser = localStorage.getItem("loggedInUser");
+  const navigate = useNavigate();
 
   const getJobDetails = (jobId) => {
     return posts.find((post) => Number(post.id) === Number(jobId));
@@ -19,7 +21,7 @@ function MySavedJobs() {
           <div className="small-space text-center">
             <p className="fw-bold mb-0">No jobs have been saved yet</p>
             <p>Jobs that you save are displayed here</p>
-            <button className="btn btn-primary">Find a job</button>
+            <button className="btn btn-primary" onClick={()=>navigate('/')}>Find a job</button>
           </div>
         ) : (
           localSavedJobs.map((savedJob) => {
@@ -42,7 +44,7 @@ function MySavedJobs() {
         <div className="small-space text-center">
           <p className="fw-bold mb-0">No jobs have been saved yet</p>
           <p>Jobs that you save are displayed here</p>
-          <button className="btn btn-primary">Find a job</button>
+          <button className="btn btn-primary" onClick={()=>navigate('/')}>Find a job</button>
         </div>
       ) : (
         savedJobs.map((savedJob) => {

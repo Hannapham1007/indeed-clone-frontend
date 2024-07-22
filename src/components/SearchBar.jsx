@@ -57,7 +57,7 @@ function SearchBar({ onSearch }) {
     <div>
       <form onSubmit={handleSubmit} className="row g-3 mx-0 px-0 py-0 my-0" >
         
-        <div className="col-md-5 col-12" style={{ position: "relative" }}>
+        <div className="col-lg-5 col-12" style={{ position: "relative" }}>
           <input
             className="form-control py-2"
             style={{ paddingLeft: "35px"}}
@@ -79,7 +79,7 @@ function SearchBar({ onSearch }) {
           />
         </div>
         <div
-          className="col-md-5 col-12"
+          className="col-lg-5 col-12"
           style={{ position: "relative" }}
           ref={locationInputRef}
         >
@@ -113,14 +113,14 @@ function SearchBar({ onSearch }) {
                   className="list-group-item list-group-item-action d-flex align-items-center"
                   onMouseDown={() => handleSuggestionClick(city)}
                 >
-                  <FaMapMarkerAlt style={{ marginRight: "10px" }} />
+                  <i className="bi bi-geo-alt-fill" style={{ marginRight: "10px" }} />
                   {city}
                 </li>
               ))}
             </ul>
           )}
         </div>
-        <div className="col-md-2 d-flex justify-content-center">
+        <div className="col-lg-2 d-flex justify-content-center">
           <button type="submit" className="btn btn-primary">
             Search jobs
           </button>

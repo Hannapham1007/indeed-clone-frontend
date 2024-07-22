@@ -34,7 +34,8 @@ function JobPost({ jobPost }) {
     }
   }, [savedJobs, jobPost.id, localSavedJobs, loggedInUser]);
 
-  const onSaveClick = async () => {
+  const onSaveClick = async (event) => {
+    event.stopPropagation();
     if (!loggedInUser) {
       const jobExists = localSavedJobs.some(savedJob => savedJob.id === jobPost.id);
 
