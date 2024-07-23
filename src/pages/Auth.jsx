@@ -30,7 +30,7 @@ function Auth() {
         </div>
       ) : (
         <div className="small-space">
-          <Signup></Signup>
+          <Signup setIsLogIn={setIsSignin}></Signup>
           <p className="text-center mt-4">
             Already have an account?
             <span

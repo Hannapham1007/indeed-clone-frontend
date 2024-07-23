@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { authSignup } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
-function Signup() {
+function Signup({setIsLogIn}) {
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -9,6 +10,7 @@ function Signup() {
     role: ["admin"],
   });
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -19,10 +21,11 @@ function Signup() {
     try {
       const response = await authSignup(userData);
       if (response) {
-        console.log("Signup successful", response);
+        alert("Your account has been successfully created!");
+        setIsLogIn(true);
+        navigate("/auth")
       }
     } catch (error) {
-      console.error("Signup error:", error);
       setError(error.message || "Signup failed");
     }
   };

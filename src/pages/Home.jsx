@@ -10,6 +10,7 @@ function Home() {
   const [filteredPosts, setFilteredPosts] = useState(posts);
   const [selectedPost, setSelectedPost] = useState(null);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   const sortPostsByDate = (posts) => {
     return posts.slice().sort((a, b) => {
@@ -41,9 +42,11 @@ function Home() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const sortedPosts = sortPostsByDate(posts);
     setFilteredPosts(sortedPosts);
     setSelectedPost(sortedPosts.length > 0 ? sortedPosts[0] : null);
+    setIsLoading(false);
   }, [posts]);
 
   const handlePostClick = (post) => {
@@ -62,14 +65,24 @@ function Home() {
         </div>
       </div>
       <h4 className="fw-bold text-center py-4 border-bottom">Job Flow</h4>
-      <div className="row small-space">
-        <div className="col-md-6 col-12 vh-100 custom-scrollbar">
-          <AllJobPosts postList={filteredPosts} onPostClick={handlePostClick} />
+      {isLoading ? (
+        <div>
+          <p>Loading</p>
+          <div className="loader"></div>
         </div>
-        <div className="col-md-6 d-none d-md-block">
-          {selectedPost && <JobPostDetails jobPost={selectedPost} />}
+      ) : (
+        <div className="row small-space">
+          <div className="col-md-6 col-12 vh-100 custom-scrollbar">
+            <AllJobPosts
+              postList={filteredPosts}
+              onPostClick={handlePostClick}
+            />
+          </div>
+          <div className="col-md-6 d-none d-md-block">
+            {selectedPost && <JobPostDetails jobPost={selectedPost} />}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

@@ -82,7 +82,7 @@ function Header() {
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
             <li className="nav-item">
-              {loggedInUser ? (<NavLink className="nav-link" to="/my_job_posts">My job posts</NavLink>) : ("")}
+              {loggedInUser ? (<NavLink className="nav-link" to="/my_job_posts">My posted jobs</NavLink>) : ("")}
             </li>
             <li className="nav-item" >
               <NavLink className="nav-link" to="/create_job_post" onClick={isLoggedInUser}>

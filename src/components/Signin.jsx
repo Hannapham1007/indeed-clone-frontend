@@ -77,13 +77,13 @@ function Signin() {
             </div>
             <div className="d-flex justify-content-center">
               <button type="submit" className="btn btn-primary my-3">
-                Submit
+                Sign in
               </button>
             </div>
             <div className="mt-2">
               <p className="my-0 small fw-bold">Testing credientials</p>
-              <p className="my-0 small fw-light">Username: adminuser</p>
-              <p className="my-0 small fw-light"> Password: adminuser</p>
+              <p className="my-0 small fw-light">Username: iamRecruiter</p>
+              <p className="my-0 small fw-light"> Password: recruiter123</p>
             </div>
           </form>
         </div>
