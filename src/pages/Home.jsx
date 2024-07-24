@@ -42,11 +42,9 @@ function Home() {
   };
 
   useEffect(() => {
-    setIsLoading(true);
     const sortedPosts = sortPostsByDate(posts);
     setFilteredPosts(sortedPosts);
     setSelectedPost(sortedPosts.length > 0 ? sortedPosts[0] : null);
-    setIsLoading(false);
   }, [posts]);
 
   const handlePostClick = (post) => {
@@ -64,13 +62,7 @@ function Home() {
           <SearchBar onSearch={handleSearch} />
         </div>
       </div>
-      <h4 className="fw-bold text-center py-4 border-bottom">Job Flow</h4>
-      {isLoading ? (
-        <div>
-          <p>Loading</p>
-          <div className="loader"></div>
-        </div>
-      ) : (
+      <h4 className="fw-bold text-center py-4 border-bottom">Job Flow</h4>    
         <div className="row small-space">
           <div className="col-md-6 col-12 vh-100 custom-scrollbar">
             <AllJobPosts
@@ -82,7 +74,6 @@ function Home() {
             {selectedPost && <JobPostDetails jobPost={selectedPost} />}
           </div>
         </div>
-      )}
     </section>
   );
 }
